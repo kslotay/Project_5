@@ -1,7 +1,7 @@
 //GENERAL USE FUNCTIONS			
-//Changes the page background image, will be used for different game modes
+//Changes the page background image
 function changeBGImage(whichImage) {
-	document.getElementById("page_body").className = "bg" + whichImage;
+	document.getElementById("page_body").className = "bg" + whichImage.toString();
 }
 
 //Capitalizes the first letter of a string
@@ -189,11 +189,19 @@ function update_Loc() {
 }
 
 //Updates points value if location has not been visited before
-function update_Points() {
+function update_Points(p) {
 	var txt_points = document.getElementById("txtPoints");
-	if (loc[current_loc].loc_visited === 0) {
-		Gameplay.points += 5;
-		txt_points.value = Gameplay.points;
+	switch (p) {
+		case 0:
+			if (loc[current_loc].loc_visited === 0) {
+				Gameplay.points += 5;
+				txt_points.value = Gameplay.points;
+			}
+			break;
+		case 1:
+			Gameplay.points += 50;
+			txt_points.value = Gameplay.points;
+			break;
 	}
 }
 
@@ -223,6 +231,8 @@ function edit_desc(locx) {
 			loc[locx].loc_desc2 = loc[locx].loc_desc_alt;
 			break;
 		case 3:
+			loc[locx].loc_desc0 = loc[locx].loc_desc_alt;
+			loc[locx].loc_desc1 = loc[locx].loc_desc_alt;
 			loc[locx].loc_desc2 = loc[locx].loc_desc_alt;
 			break;
 		case 5:
@@ -241,6 +251,13 @@ function edit_desc(locx) {
 			loc[locx].loc_desc1 = loc[locx].loc_desc_alt;
 			loc[locx].loc_desc2 = loc[locx].loc_desc_alt;
 			break;
+		case 69:
+			for (i = 0, len = loc.length; i < len; i++) {	
+				loc[i].loc_desc0 = loc[i].loc_desc_sarcasm0;
+				loc[i].loc_desc1 = loc[i].loc_desc_sarcasm1;
+				loc[i].loc_desc2 = loc[i].loc_desc_sarcasm2;
+			}
+			break;
 		case 81:
 			loc[8].loc_desc0 = loc[8].loc_desc2;
 			loc[8].loc_desc1 = loc[8].loc_desc2;
@@ -258,6 +275,7 @@ function player_Win() {
 	var txtCommand = document.getElementById("txtCommand");
 	var btn_Enter = document.getElementById("btn_Enter");
 	btn_disable("all");
+	//If player has rocket launcher in inventory, game has alternate ending
 	if (player_inventory[2].inventory_q != 0) {
 		update_display_msg(13);
 		setTimeout(function() {changeBGImage(2)},5000);
@@ -265,6 +283,17 @@ function player_Win() {
 	else {
 		update_display_msg(9);
 	}
+	txtCommand.disabled = true;
+	btn_Enter.disabled = true;
+}
+
+//Executed when the player loses the game
+function player_Lose() {
+	var txtCommand = document.getElementById("txtCommand");
+	var btn_Enter = document.getElementById("btn_Enter");
+	btn_disable("all");
+	update_display_msg(18);
+	changeBGImage(3);
 	txtCommand.disabled = true;
 	btn_Enter.disabled = true;
 }
@@ -341,6 +370,8 @@ function cmd_Take() {
 				edit_desc(current_loc);
 				player_inventory[cur_item].inventory_q++;
 				invArray[current_loc][cur_item]--;
+				update_Points(1);
+				breach_c_Fence();
 			}
 			else {
 				gameplayError(0);
@@ -401,6 +432,7 @@ function cmd_Unlock() {
 			}
 			break;
 		case 8:
+			//If location is Warden's office and the player has a lock pick in inventory, unlocks safe
 			if ((loc[current_loc].loc_visited > 1) && (player_inventory[1].inventory_q != 0)) {
 				update_display_msg(10);
 				edit_desc(current_loc);
@@ -442,7 +474,7 @@ function cmd_Eat() {
 		player_inventory[0].inventory_q--;
 	}
 	//Otherwise if player is currently in the dining room and does not have any food in inventory, eat directly
-	else if ((current_loc === 1) && (loc[current_loc].loc_desc() != loc[current_loc].loc_desc_alt) && (player_inventory[0].inventory_q == 0)) {
+	else if ((current_loc === 1) && (loc[current_loc].loc_desc() != loc[current_loc].loc_desc_alt) && (player_inventory[0].inventory_q === 0)) {
 		update_display_msg(8);
 		edit_desc(current_loc);
 	}
@@ -497,6 +529,54 @@ function cmd_Listen() {
 	}
 }
 
+//Activate different game modes
+function cmd_Cheatmode() {
+	switch (Gameplay.cheatmode) {
+		case 0:
+			Gameplay.cheatmode = 1;
+			edit_desc(69);
+			break;
+		case 1:
+			Gameplay.cheatmode = 2;
+			break;
+	}
+}
+
+//Executed on 'sit down' command
+function cmd_sitDown() {
+	if (current_loc === 8) {
+		update_display_msg(14);
+		changeBGImage(4);
+		btn_disable("all");
+	}
+}
+
+//Executed when the user answers '19'
+function cmd_19() {
+	if (current_loc === 8) {
+		update_display_msg(16);
+		setInterval(function() {player_Lose()}, 3000);
+	}
+}
+
+//Executed when the user answers '21'
+function cmd_21() {
+	if (current_loc === 8) {
+		update_display_msg(15);
+		changeBGImage(0);
+		btn_set();
+		breach_c_Fence();
+	}
+}
+
+//Executed on 'wake up' command
+function cmd_wakeUp() {
+	var alertArray = ["A dream within a dream?", "Why don't you stop playing games and do some actual work?","RUN","I know what you're thinking: This game is amazing!"]
+	var randomNumber = Math.floor(Math.random() * alertArray.length)
+	alert(alertArray[randomNumber]);
+	update_display_msg(17);
+}
+
 //Location navigation function
 function loc_nav(d) {
 	switch (current_loc) {
@@ -528,7 +608,7 @@ function loc_nav(d) {
 function param_change() {
 	update_Loc();
 	update_Map(1);
-	update_Points();
+	update_Points(0);
 	update_display_msg(0);
 	loc[current_loc].loc_visited++;
 	btn_set();
@@ -555,23 +635,6 @@ function btnSouth_Click() {
 
 function btnWest_Click() {
 	loc_nav(3)
-}
-
-//Implementing new gamemodes, not yet complete
-function cmd_Cheatmode() {
-	Gameplay.cheatmode = 1;
-}
-
-//Sarcasm game mode, WIP
-function cmd_Sarcasm() {
-}
-
-//Wman game mode, WIP
-function cmd_wman() {
-}
-
-//James Bond game mode, WIP
-function cmd_007() {
 }
 
 //Enter button function
@@ -638,13 +701,24 @@ function btnEnter_click() {
 			cmd_Cheatmode();
 			break;
 		case 14:
-			cmd_Sarcasm();
+			if(Gameplay.cheatmode === 1) {
+				cmd_sitDown();
+			}
 			break;
 		case 15:
-			cmd_wman();
+			if(Gameplay.cheatmode === 1) {
+				cmd_19();
+			}
 			break;
 		case 16:
-			cmd_007();
+			if(Gameplay.cheatmode === 1) {
+				cmd_21();
+			}
+			break;
+		case 17:
+			if(Gameplay.cheatmode === 1) {
+				cmd_wakeUp();
+			}
 			break;
 		default:
 			gameplayError(5);

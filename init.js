@@ -20,13 +20,13 @@ function inventory_item() {
 
 function initialize_Game() {
 	//Gameplay commands
-	Gameplay.cmd = ["n", "e", "s", "w", "look", "take", "unlock", "help", "climb", "eat", "inventory", "clear", "listen","cheatmode","sarcasm","w**dman","007"];
+	Gameplay.cmd = ["n", "e", "s", "w", "look", "take", "unlock", "help", "climb", "eat", "inventory", "clear", "listen", "cheatmode", "sit down", "19", "21", "wake up"];
 	//Game points
 	Gameplay.points = 0;
 	//cheatmode
 	Gameplay.cheatmode = 0;
 	//Command descriptions, used for help
-	Gameplay.cmd_desc = ["Go North","Go East","Go South","Go West","Look around","Take object","Unlock door","Shows help","Climb","Eat food","Check Inventory","Clear display box","Listen to radio (if applicable)"];
+	Gameplay.cmd_desc = ["Go North","Go East","Go South","Go West","Look around","Take object","Unlock door","Shows help","Climb","Eat food","Check Inventory","Clear display box","Listen to radio (if applicable)","","Sit down", "Answer 19", "Answer 21", "Wake up"];
 	
 	//Inventory items
 	var food = new inventory_item();

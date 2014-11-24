@@ -17,7 +17,12 @@ function update_Display(num, type) {
 					   "You have unlocked the safe! There is a rare gold coin inside!",
 					   "You have taken the rare gold coin!",
 					   "YAASS! You have a Rocket Launcher!",
-					   "Outside the prison, a getaway car pulls up to aid your escape. You enter the convertible vehicle, bring out your rocket launcher and turn around. You then take aim and fire straight at the prison as you move away!"];
+					   "Outside the prison, a getaway car pulls up to aid your escape. You enter the convertible vehicle, bring out your rocket launcher and turn around. You then take aim and fire straight at the prison as you move away!",
+					   "You sit down. The Warden asks you one question: What's 9 + 10?",
+					   "You stupid, you are free to leave but you still stupid.",
+					   "Wrong answer!",
+					   "You wake up and look around. You are lying in bed. In a prison cell.",
+					   "You lose! You are a failure."];
 			break;
 		case 1:
 			message = ["You cannot go that way!",
@@ -44,7 +49,7 @@ function update_Display(num, type) {
 		else if (num === 1) {
 			msg_box.value = message[num];
 		}
-		else if (num === 9 || num === 13) {
+		else if (num === 9 || num === 13 || num === 18) {
 			msg_box.value = message[num];
 		}
 		else {
@@ -61,6 +66,7 @@ function update_Display(num, type) {
 	}
 }
 
+//Updates the display message
 function update_display_msg(msg) {
 	update_Display(msg, 0);
 }
