@@ -16,7 +16,8 @@ function update_Display(num, type) {
 					   "Congratulations! You have escaped!",
 					   "You have unlocked the safe! There is a rare gold coin inside!",
 					   "You have taken the rare gold coin!",
-					   "YAASS! You have a Rocket Launcher!"];
+					   "YAASS! You have a Rocket Launcher!",
+					   "Outside the prison, a getaway car pulls up to aid your escape. You enter the convertible vehicle, bring out your rocket launcher and turn around. You then take aim and fire straight at the prison as you move away!"];
 			break;
 		case 1:
 			message = ["You cannot go that way!",
@@ -43,7 +44,7 @@ function update_Display(num, type) {
 		else if (num === 1) {
 			msg_box.value = message[num];
 		}
-		else if (num === 9) {
+		else if (num === 9 || num === 13) {
 			msg_box.value = message[num];
 		}
 		else {

@@ -258,7 +258,13 @@ function player_Win() {
 	var txtCommand = document.getElementById("txtCommand");
 	var btn_Enter = document.getElementById("btn_Enter");
 	btn_disable("all");
-	update_display_msg(9);
+	if (player_inventory[2].inventory_q != 0) {
+		update_display_msg(13);
+		setTimeout(function() {changeBGImage(2)},5000);
+	}
+	else {
+		update_display_msg(9);
+	}
 	txtCommand.disabled = true;
 	btn_Enter.disabled = true;
 }
@@ -309,7 +315,7 @@ function cmd_Take() {
 			}
 			break;
 		case 4:
-			if ((cheatmode === 1) && (cur_item != -1)) {
+			if ((Gameplay.cheatmode === 1) && (cur_item != -1)) {
 				update_display_msg(12);
 				player_inventory[cur_item].inventory_q++;
 				invArray[current_loc][cur_item]--;
@@ -344,9 +350,7 @@ function cmd_Take() {
 			if ((loc[current_loc].loc_visited > 0) && (cur_item != -1)) {
 				update_display_msg(2);
 				edit_desc(current_loc);
-				alert(player_inventory[cur_item].inventory_q);
 				player_inventory[cur_item].inventory_q++;
-				alert(player_inventory[cur_item].inventory_q);
 				invArray[current_loc][cur_item]--;
 			}
 			else {

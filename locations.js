@@ -74,7 +74,7 @@ function initialize_Locations() {
 	loc.push(multi_room_2);
 	
 	var courtyard_3 = new Loc_obj;
-	courtyard_3.loc_name = "";
+	courtyard_3.loc_name = "Courtyard";
 	courtyard_3.loc_desc0 = "The courtyard is empty except for the few guards on watch duty.";
 	courtyard_3.loc_desc1 = "The courtyard is empty except for the few guards on watch duty.";
 	courtyard_3.loc_desc2 = "The courtyard is empty except for the few guards on watch duty.";
